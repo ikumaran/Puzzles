@@ -11,49 +11,96 @@ import java.util.Objects;
 public class RelativeFile {
 
     // ++++++++++++++++ Define test data. +++++++++++++++++
+    // Windows test data
     // Root path for testing
-    private static final String ROOT_PATH = "C:/Folder1/Folder2";
+    private static final String WIN_ROOT_PATH = "C:/Folder1/Folder2";
 
     // Key: relative path
     // Value: Expected output
-    private static final HashMap<String, String> RELATIVE_PATH_OUTPUT_MAP = new HashMap<>();
+    private static final HashMap<String, String> WIN_RELATIVE_PATH_OUTPUT_MAP = new HashMap<>();
 
     // Define some list of valid folders and files.
-    private static final List<String> VALID_FILES_AND_FOLDERS = new ArrayList<>();
+    private static final List<String> LINUX_WIN_VALID_FILES_AND_FOLDERS = new ArrayList<>();
 
     static {
         // Windows style
-        RELATIVE_PATH_OUTPUT_MAP.put("test.txt", "C:/Folder1/Folder2/test.txt");
-        RELATIVE_PATH_OUTPUT_MAP.put("../../test.txt", "C:/test.txt");
-        RELATIVE_PATH_OUTPUT_MAP.put("../.././test.txt", "C:/test.txt");
-        RELATIVE_PATH_OUTPUT_MAP.put("../valid/test.txt", "C:/Folder1/valid/test.txt");
-        RELATIVE_PATH_OUTPUT_MAP.put("./test.txt", "C:/Folder1/Folder2/test.txt");
-        RELATIVE_PATH_OUTPUT_MAP.put("../valid/../test.txt", "C:/Folder1/test.txt");
-        RELATIVE_PATH_OUTPUT_MAP.put("../valid/../Folder2/../valid/../test.txt", "C:/Folder1/test.txt");
-        RELATIVE_PATH_OUTPUT_MAP.put("../valid/../kumaran/../test.txt", "ERROR");
-        RELATIVE_PATH_OUTPUT_MAP.put("../valid/../suresh/../kumaran/../test.txt", "ERROR");
-        RELATIVE_PATH_OUTPUT_MAP.put("../Kumaran/../test.txt", "ERROR");
-        RELATIVE_PATH_OUTPUT_MAP.put("valid/Kumaran/../test.txt", "ERROR");
-        RELATIVE_PATH_OUTPUT_MAP.put("valid/test.txt", "ERROR");
-        RELATIVE_PATH_OUTPUT_MAP.put("../../../test.txt", "ERROR");
-        RELATIVE_PATH_OUTPUT_MAP.put("../../../../test.txt", "ERROR");
+        WIN_RELATIVE_PATH_OUTPUT_MAP.put("test.txt", "C:/Folder1/Folder2/test.txt");
+        WIN_RELATIVE_PATH_OUTPUT_MAP.put("../../test.txt", "C:/test.txt");
+        WIN_RELATIVE_PATH_OUTPUT_MAP.put("../.././test.txt", "C:/test.txt");
+        WIN_RELATIVE_PATH_OUTPUT_MAP.put("../valid/test.txt", "C:/Folder1/valid/test.txt");
+        WIN_RELATIVE_PATH_OUTPUT_MAP.put("./test.txt", "C:/Folder1/Folder2/test.txt");
+        WIN_RELATIVE_PATH_OUTPUT_MAP.put("../valid/../test.txt", "C:/Folder1/test.txt");
+        WIN_RELATIVE_PATH_OUTPUT_MAP.put("../valid/../Folder2/../valid/../test.txt", "C:/Folder1/test.txt");
+        WIN_RELATIVE_PATH_OUTPUT_MAP.put("../valid/../kumaran/../test.txt", "ERROR");
+        WIN_RELATIVE_PATH_OUTPUT_MAP.put("../valid/../suresh/../kumaran/../test.txt", "ERROR");
+        WIN_RELATIVE_PATH_OUTPUT_MAP.put("./../valid/../suresh/../kumaran/../test.txt", "ERROR");
+        WIN_RELATIVE_PATH_OUTPUT_MAP.put("../Kumaran/../test.txt", "ERROR");
+        WIN_RELATIVE_PATH_OUTPUT_MAP.put("valid/Kumaran/../test.txt", "ERROR");
+        WIN_RELATIVE_PATH_OUTPUT_MAP.put("valid/test.txt", "ERROR");
+        WIN_RELATIVE_PATH_OUTPUT_MAP.put("../../../test.txt", "ERROR");
+        WIN_RELATIVE_PATH_OUTPUT_MAP.put("../../../../test.txt", "ERROR");
+        WIN_RELATIVE_PATH_OUTPUT_MAP.put("./../../../../test.txt", "ERROR");
 
-        VALID_FILES_AND_FOLDERS.add("C:/");
-        VALID_FILES_AND_FOLDERS.add("C:/Folder1");
-        VALID_FILES_AND_FOLDERS.add("C:/Folder1/Folder2");
-        VALID_FILES_AND_FOLDERS.add("C:/Folder1/Folder2/test.txt");
-        VALID_FILES_AND_FOLDERS.add("C:/Folder1/test.txt");
-        VALID_FILES_AND_FOLDERS.add("C:/Folder1/valid");
-        VALID_FILES_AND_FOLDERS.add("C:/Folder1/valid/test.txt");
-        VALID_FILES_AND_FOLDERS.add("C:/test.txt");
+        LINUX_WIN_VALID_FILES_AND_FOLDERS.add("C:/");
+        LINUX_WIN_VALID_FILES_AND_FOLDERS.add("C:/Folder1");
+        LINUX_WIN_VALID_FILES_AND_FOLDERS.add("C:/Folder1/Folder2");
+        LINUX_WIN_VALID_FILES_AND_FOLDERS.add("C:/Folder1/Folder2/test.txt");
+        LINUX_WIN_VALID_FILES_AND_FOLDERS.add("C:/Folder1/test.txt");
+        LINUX_WIN_VALID_FILES_AND_FOLDERS.add("C:/Folder1/valid");
+        LINUX_WIN_VALID_FILES_AND_FOLDERS.add("C:/Folder1/valid/test.txt");
+        LINUX_WIN_VALID_FILES_AND_FOLDERS.add("C:/test.txt");
+    }
+
+    // Linux test data
+    // Root path for testing
+    private static final String LINUX_ROOT_PATH = "/Folder1/Folder2";
+
+    // Key: relative path
+    // Value: Expected output
+    private static final HashMap<String, String> LINUX_RELATIVE_PATH_OUTPUT_MAP = new HashMap<>();
+
+    static {
+        // Windows style
+        LINUX_RELATIVE_PATH_OUTPUT_MAP.put("test.txt", "/Folder1/Folder2/test.txt");
+        LINUX_RELATIVE_PATH_OUTPUT_MAP.put("../../test.txt", "/test.txt");
+        LINUX_RELATIVE_PATH_OUTPUT_MAP.put("../.././test.txt", "/test.txt");
+        LINUX_RELATIVE_PATH_OUTPUT_MAP.put("../valid/test.txt", "/Folder1/valid/test.txt");
+        LINUX_RELATIVE_PATH_OUTPUT_MAP.put("./test.txt", "/Folder1/Folder2/test.txt");
+        LINUX_RELATIVE_PATH_OUTPUT_MAP.put("../valid/../test.txt", "/Folder1/test.txt");
+        LINUX_RELATIVE_PATH_OUTPUT_MAP.put("../valid/../Folder2/../valid/../test.txt", "/Folder1/test.txt");
+        LINUX_RELATIVE_PATH_OUTPUT_MAP.put("../valid/../kumaran/../test.txt", "ERROR");
+        LINUX_RELATIVE_PATH_OUTPUT_MAP.put("../valid/../suresh/../kumaran/../test.txt", "ERROR");
+        LINUX_RELATIVE_PATH_OUTPUT_MAP.put("./../valid/../suresh/../kumaran/../test.txt", "ERROR");
+        LINUX_RELATIVE_PATH_OUTPUT_MAP.put("../Kumaran/../test.txt", "ERROR");
+        LINUX_RELATIVE_PATH_OUTPUT_MAP.put("valid/Kumaran/../test.txt", "ERROR");
+        LINUX_RELATIVE_PATH_OUTPUT_MAP.put("valid/test.txt", "ERROR");
+        LINUX_RELATIVE_PATH_OUTPUT_MAP.put("../../../test.txt", "ERROR");
+        LINUX_RELATIVE_PATH_OUTPUT_MAP.put("../../../../test.txt", "ERROR");
+        LINUX_RELATIVE_PATH_OUTPUT_MAP.put("./../../../../test.txt", "ERROR");
+
+        LINUX_WIN_VALID_FILES_AND_FOLDERS.add("/");
+        LINUX_WIN_VALID_FILES_AND_FOLDERS.add("/Folder1");
+        LINUX_WIN_VALID_FILES_AND_FOLDERS.add("/Folder1/Folder2");
+        LINUX_WIN_VALID_FILES_AND_FOLDERS.add("/Folder1/Folder2/test.txt");
+        LINUX_WIN_VALID_FILES_AND_FOLDERS.add("/Folder1/test.txt");
+        LINUX_WIN_VALID_FILES_AND_FOLDERS.add("/Folder1/valid");
+        LINUX_WIN_VALID_FILES_AND_FOLDERS.add("/Folder1/valid/test.txt");
+        LINUX_WIN_VALID_FILES_AND_FOLDERS.add("/test.txt");
     }
     // ++++++++++++++++ END: Define test data. +++++++++++++++++
 
     public static void main(String[] args) {
         // do testing for each test data criteria in the RELATIVE_PATH_OUTPUT_MAP
-        for (Map.Entry<String, String> entry : RELATIVE_PATH_OUTPUT_MAP.entrySet()) {
+        for (Map.Entry<String, String> entry : WIN_RELATIVE_PATH_OUTPUT_MAP.entrySet()) {
             // Real method invocation.
-            String output = getAbsolutePath(ROOT_PATH, entry.getKey());
+            String output = getAbsolutePath(WIN_ROOT_PATH, entry.getKey());
+            System.out.println(Objects.equals(output, entry.getValue()) ? "SUCCESS" : "ERROR !!!");
+            System.out.println("Input: " + entry.getKey() + "\n | Expected: " + entry.getValue() + "\n | Actual: " + output);
+        }
+        // do testing for each test data criteria in the RELATIVE_PATH_OUTPUT_MAP
+        for (Map.Entry<String, String> entry : LINUX_RELATIVE_PATH_OUTPUT_MAP.entrySet()) {
+            // Real method invocation.
+            String output = getAbsolutePath(LINUX_ROOT_PATH, entry.getKey());
             System.out.println(Objects.equals(output, entry.getValue()) ? "SUCCESS" : "ERROR !!!");
             System.out.println("Input: " + entry.getKey() + "\n | Expected: " + entry.getValue() + "\n | Actual: " + output);
         }
@@ -94,7 +141,7 @@ public class RelativeFile {
                 newAbsolutePath.append(currentPathItem);
 
                 // compare with list of valid files and folders
-                if (!VALID_FILES_AND_FOLDERS.contains(newAbsolutePath.toString())) {
+                if (!LINUX_WIN_VALID_FILES_AND_FOLDERS.contains(newAbsolutePath.toString())) {
                     return "ERROR";
                 } else {
                     absolutePath = newAbsolutePath.toString();
